@@ -1,268 +1,351 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeetingMind - AI Meeting Notes Organizer</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Build Your Own AI Meeting Assistant - Workshop Guide</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Typography Plugin for easy article styling -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
+                            500: '#10b981',
+                            600: '#059669',
                         }
                     }
                 }
             }
         }
     </script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Marked for Markdown Rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1d1f21;
+            padding: 0.5rem 1rem;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            font-size: 0.75rem;
+            color: #a1a1aa;
+            margin-bottom: -1em;
+            position: relative;
+            z-index: 10;
         }
-        .dark .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(51, 65, 85, 0.6);
-        }
-        @keyframes pulse-subtle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        .animate-pulse-subtle {
-            animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        pre[class*="language-"] {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            margin-top: 0;
+            max-height: 500px;
+            overflow-y: auto;
         }
     </style>
 </head>
-<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 flex flex-col">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900">
 
-    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-                    <i class="fa-solid fa-brain text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-tight">MeetingMind</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">AI-Powered Action Extractor</p>
-                </div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 backdrop-blur-sm bg-white/90">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2 text-emerald-600 font-bold text-lg">
+                <i class="fa-solid fa-code"></i>
+                <span>AI Builder Workshop</span>
             </div>
-            
-            <div class="flex items-center space-x-3">
-                <!-- API Key Button -->
-                <button id="open-settings" class="inline-flex items-center space-x-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700">
-                    <i class="fa-solid fa-key text-emerald-500"></i>
-                    <span id="api-key-status-text">API Key</span>
-                </button>
-                
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">
-                    <i class="fa-solid fa-moon dark:hidden"></i>
-                    <i class="fa-solid fa-sun hidden dark:inline"></i>
-                </button>
-            </div>
+            <a href="#start" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">Start Building &rarr;</a>
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden">
-        
-        <!-- Left Column: Input Panel -->
-        <section class="lg:col-span-5 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <h2 class="font-semibold text-sm flex items-center space-x-2">
-                    <i class="fa-regular fa-pen-to-square text-emerald-500"></i>
-                    <span>Input Meeting Notes</span>
-                </h2>
-                <div class="flex items-center space-x-2">
-                    <label class="cursor-pointer inline-flex items-center space-x-1.5 px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition border border-emerald-200 dark:border-emerald-800">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <span>Upload File</span>
-                        <input type="file" id="file-upload" accept=".txt,.md,.json" class="hidden">
-                    </label>
-                    <button id="clear-btn" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-md transition" title="Clear Notes">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex-1 p-4 flex flex-col">
-                <textarea id="notes-input" placeholder="Paste your messy meeting notes here... (e.g., 'Spoke with Sarah about Q3 marketing deck. She needs updated slides by Friday. John mentioned server migration is delayed until next week.')" class="w-full flex-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none leading-relaxed placeholder:text-slate-400"></textarea>
-                
-                <div class="mt-4 flex items-center justify-between">
-                    <span id="char-count" class="text-xs text-slate-400">0 characters</span>
-                    <button id="process-btn" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-sm shadow-lg shadow-emerald-500/20 transition-all transform active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>Transform Notes</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Right Column: Output / Structured Results Panel -->
-        <section class="lg:col-span-7 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-            <!-- Output Header & Tabs -->
-            <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-                <div class="flex items-center space-x-1 bg-slate-200/60 dark:bg-slate-800 p-1 rounded-lg text-xs font-medium">
-                    <button data-tab="structured" class="tab-btn px-3 py-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition">Structured View</button>
-                    <button data-tab="markdown" class="tab-btn px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 transition">Markdown</button>
-                </div>
-
-                <div id="action-buttons" class="hidden flex items-center space-x-2">
-                    <button id="copy-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-regular fa-copy"></i>
-                        <span>Copy</span>
-                    </button>
-                    <button id="export-md-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-solid fa-download"></i>
-                        <span>.MD</span>
-                    </button>
-                    <button id="export-json-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-solid fa-code"></i>
-                        <span>.JSON</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Output Body -->
-            <div class="flex-1 overflow-y-auto p-6 relative">
-                <!-- Initial Empty State -->
-                <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-2xl mb-4 border border-emerald-100 dark:border-emerald-900/50">
-                        <i class="fa-solid fa-clipboard-list"></i>
-                    </div>
-                    <h3 class="font-semibold text-base mb-1">No Meeting Organized Yet</h3>
-                    <p class="text-xs text-slate-400 max-w-sm leading-relaxed">Paste your notes on the left or upload a transcript file, then click "Transform Notes" to extract actions and deadlines.</p>
-                </div>
-
-                <!-- Loading State -->
-                <div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-center p-6">
-                    <div class="w-12 h-12 rounded-full border-3 border-emerald-500 border-t-transparent animate-spin mb-4"></div>
-                    <h3 class="font-semibold text-sm mb-1 animate-pulse-subtle">Synthesizing Meeting Intelligence...</h3>
-                    <p class="text-xs text-slate-400">Extracting summary, decisions, assignees, and deadlines.</p>
-                </div>
-
-                <!-- Structured View Container -->
-                <div id="structured-output" class="hidden space-y-6">
-                    <!-- Meeting Overview / Summary -->
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800">
-                        <h4 class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <span>Executive Summary</span>
-                        </h4>
-                        <p id="out-summary" class="text-sm leading-relaxed text-slate-700 dark:text-slate-300"></p>
-                    </div>
-
-                    <!-- Key Discussion Points -->
-                    <div>
-                        <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-comments"></i>
-                            <span>Key Discussion Points</span>
-                        </h4>
-                        <ul id="out-discussions" class="space-y-2 text-sm"></ul>
-                    </div>
-
-                    <!-- Action Items Table / List -->
-                    <div>
-                        <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>Action Items & Deadlines</span>
-                        </h4>
-                        <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
-                            <table class="w-full text-left border-collapse text-sm">
-                                <thead class="bg-slate-100 dark:bg-slate-800/80 text-xs text-slate-500 dark:text-slate-400 uppercase">
-                                    <tr>
-                                        <th class="p-3 font-semibold">Task</th>
-                                        <th class="p-3 font-semibold">Assignee</th>
-                                        <th class="p-3 font-semibold">Deadline</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="out-actions-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Follow-ups & Next Meeting -->
-                    <div class="p-4 rounded-xl bg-teal-50/50 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40">
-                        <h4 class="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-calendar-check"></i>
-                            <span>Next Steps & Follow-ups</span>
-                        </h4>
-                        <p id="out-followups" class="text-sm leading-relaxed text-slate-700 dark:text-slate-300"></p>
-                    </div>
-                </div>
-
-                <!-- Markdown View Container -->
-                <div id="markdown-output" class="hidden prose dark:prose-invert max-w-none text-sm leading-relaxed">
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-base flex items-center space-x-2">
-                    <i class="fa-solid fa-key text-emerald-500"></i>
-                    <span>Gemini API Key Configuration</span>
-                </h3>
-                <button id="close-settings" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
-                This app runs entirely in your browser. Enter your Gemini API key to enable client-side AI note processing. Your key is saved locally in your browser session only.
+    <div class="bg-slate-900 text-white py-20 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-400 via-emerald-900 to-slate-900"></div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold tracking-wider mb-4 border border-emerald-500/30">ADVANCED EDITION</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Build a Pro-Level AI Meeting Assistant</h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                Learn how to build a fully-featured, serverless web application complete with dark mode, markdown exports, and file uploads. Run it entirely in your browser using the Gemini API.
             </p>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">API Key</label>
-                    <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button id="save-api-key" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-medium shadow-sm transition">
-                        Save Key
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 rounded-xl text-xs font-medium shadow-xl transform translate-y-16 opacity-0 transition-all duration-300 flex items-center space-x-2">
-        <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
-        <span id="toast-msg">Success</span>
-    </div>
+    <main class="max-w-4xl mx-auto px-6 py-12" id="start">
+        <article class="prose prose-slate prose-lg md:prose-xl max-w-none prose-a:text-emerald-600 hover:prose-a:text-emerald-500 prose-img:rounded-xl">
+            
+            <p class="lead">
+                Welcome! In this workshop, you will build a sophisticated app that takes messy meeting notes and uses the Gemini API to instantly extract clean summaries, key discussion points, and structured action items.
+            </p>
 
-    <script>
+            <hr>
+
+            <h2>What You Will Learn</h2>
+            <ol>
+                <li><strong>How to Get a Gemini API Key:</strong> Generating your free developer key using Google AI Studio.</li>
+                <li><strong>The Power of Client-Side Apps:</strong> How to build a fully functional web app using a single HTML file.</li>
+                <li><strong>Advanced Frontend Styling:</strong> Using Tailwind CSS for Dark Mode, interactive tabs, and glassmorphism effects.</li>
+                <li><strong>Robust API Integration:</strong> Connecting directly to `gemini-1.5-flash` with a "Smart Extractor" to guarantee perfect JSON data every time.</li>
+            </ol>
+
+            <hr>
+
+            <h2>Step 1: Get Your Free Gemini API Key</h2>
+            <p>
+                To let your browser talk to Google's AI models, you'll need a free API key from Google AI Studio. 
+            </p>
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg my-6">
+                <p class="m-0 text-sky-900 text-base"><strong>Do I have to pay for this?</strong> <br>
+                <strong>No!</strong> Google offers a generous <strong>Free Tier</strong> which is perfect for this workshop. You do not need to enter a credit card to get your key.</p>
+            </div>
+            
+            <ol>
+                <li>Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a> and sign in.</li>
+                <li>Click <strong>Get API key</strong> in the dashboard.</li>
+                <li>Click <strong>Create API key in new project</strong>.</li>
+                <li>Copy your API key and save it. You will paste this into your web app!</li>
+            </ol>
+
+            <hr>
+
+            <h2>Step 2: Set Up Your Workspace</h2>
+            <p>You don’t need any complex software installations to get started.</p>
+            <ol>
+                <li>Create a folder on your computer named <code>meeting-assistant</code>.</li>
+                <li>Inside it, create a file named <code>index.html</code> and open it in your favorite code editor.</li>
+            </ol>
+
+            <hr>
+
+            <h2>Step 3: Building the Application Code</h2>
+            <p>
+                We are going to build this entire application inside your <code>index.html</code> file by copying and pasting three powerful chunks of code.
+            </p>
+
+            <h3>3.1 The User Interface (HTML & CSS)</h3>
+            <p>First, we build the visual structure. This version includes advanced features like a Dark Mode toggle, file upload buttons, and tabs to switch between a structured table and a Markdown view.</p>
+            <p><strong>Copy this first chunk and paste it into your empty <code>index.html</code> file:</strong></p>
+
+            <div class="code-header"><span>index.html (Part 1: UI Structure)</span></div>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en" class="h-full"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;MeetingMind - AI Meeting Notes Organizer&lt;/title&gt;
+    &lt;!-- Tailwind CSS CDN --&gt;
+    &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }
+                    }
+                }
+            }
+        }
+    &lt;/script&gt;
+    &lt;!-- Inter Font --&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"&gt;
+    &lt;!-- FontAwesome Icons --&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
+    &lt;!-- Marked for Markdown Rendering --&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .dark .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.6); }
+        @keyframes pulse-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .animate-pulse-subtle { animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 flex flex-col"&gt;
+    &lt;header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-30"&gt;
+        &lt;div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"&gt;
+            &lt;div class="flex items-center space-x-3"&gt;
+                &lt;div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20"&gt;
+                    &lt;i class="fa-solid fa-brain text-lg"&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;h1 class="font-bold text-lg leading-tight tracking-tight"&gt;MeetingMind&lt;/h1&gt;
+                    &lt;p class="text-xs text-slate-500 dark:text-slate-400"&gt;AI-Powered Action Extractor&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="flex items-center space-x-3"&gt;
+                &lt;button id="open-settings" class="inline-flex items-center space-x-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700"&gt;
+                    &lt;i class="fa-solid fa-key text-emerald-500"&gt;&lt;/i&gt;
+                    &lt;span id="api-key-status-text"&gt;API Key&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors"&gt;
+                    &lt;i class="fa-solid fa-moon dark:hidden"&gt;&lt;/i&gt;
+                    &lt;i class="fa-solid fa-sun hidden dark:inline"&gt;&lt;/i&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden"&gt;
+        &lt;section class="lg:col-span-5 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"&gt;
+            &lt;div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between"&gt;
+                &lt;h2 class="font-semibold text-sm flex items-center space-x-2"&gt;
+                    &lt;i class="fa-regular fa-pen-to-square text-emerald-500"&gt;&lt;/i&gt;
+                    &lt;span&gt;Input Meeting Notes&lt;/span&gt;
+                &lt;/h2&gt;
+                &lt;div class="flex items-center space-x-2"&gt;
+                    &lt;label class="cursor-pointer inline-flex items-center space-x-1.5 px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition border border-emerald-200 dark:border-emerald-800"&gt;
+                        &lt;i class="fa-solid fa-cloud-arrow-up"&gt;&lt;/i&gt;
+                        &lt;span&gt;Upload File&lt;/span&gt;
+                        &lt;input type="file" id="file-upload" accept=".txt,.md,.json" class="hidden"&gt;
+                    &lt;/label&gt;
+                    &lt;button id="clear-btn" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-md transition" title="Clear Notes"&gt;
+                        &lt;i class="fa-solid fa-trash-can text-xs"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="flex-1 p-4 flex flex-col"&gt;
+                &lt;textarea id="notes-input" placeholder="Paste your messy meeting notes here..." class="w-full flex-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none leading-relaxed placeholder:text-slate-400"&gt;&lt;/textarea&gt;
+                &lt;div class="mt-4 flex items-center justify-between"&gt;
+                    &lt;span id="char-count" class="text-xs text-slate-400"&gt;0 characters&lt;/span&gt;
+                    &lt;button id="process-btn" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-sm shadow-lg shadow-emerald-500/20 transition-all transform active:scale-95 cursor-pointer"&gt;
+                        &lt;i class="fa-solid fa-wand-magic-sparkles"&gt;&lt;/i&gt;
+                        &lt;span&gt;Transform Notes&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="lg:col-span-7 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"&gt;
+            &lt;div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50"&gt;
+                &lt;div class="flex items-center space-x-1 bg-slate-200/60 dark:bg-slate-800 p-1 rounded-lg text-xs font-medium"&gt;
+                    &lt;button data-tab="structured" class="tab-btn px-3 py-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition"&gt;Structured View&lt;/button&gt;
+                    &lt;button data-tab="markdown" class="tab-btn px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 transition"&gt;Markdown&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div id="action-buttons" class="hidden flex items-center space-x-2"&gt;
+                    &lt;button id="copy-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700"&gt;
+                        &lt;i class="fa-regular fa-copy"&gt;&lt;/i&gt;&lt;span&gt;Copy&lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;button id="export-md-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700"&gt;
+                        &lt;i class="fa-solid fa-download"&gt;&lt;/i&gt;&lt;span&gt;.MD&lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;button id="export-json-btn" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700"&gt;
+                        &lt;i class="fa-solid fa-code"&gt;&lt;/i&gt;&lt;span&gt;.JSON&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="flex-1 overflow-y-auto p-6 relative"&gt;
+                &lt;div id="empty-state" class="h-full flex flex-col items-center justify-center text-center p-6"&gt;
+                    &lt;div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center text-2xl mb-4 border border-emerald-100 dark:border-emerald-900/50"&gt;
+                        &lt;i class="fa-solid fa-clipboard-list"&gt;&lt;/i&gt;
+                    &lt;/div&gt;
+                    &lt;h3 class="font-semibold text-base mb-1"&gt;No Meeting Organized Yet&lt;/h3&gt;
+                    &lt;p class="text-xs text-slate-400 max-w-sm leading-relaxed"&gt;Paste your notes on the left or upload a transcript file, then click "Transform Notes".&lt;/p&gt;
+                &lt;/div&gt;
+
+                &lt;div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-center p-6"&gt;
+                    &lt;div class="w-12 h-12 rounded-full border-3 border-emerald-500 border-t-transparent animate-spin mb-4"&gt;&lt;/div&gt;
+                    &lt;h3 class="font-semibold text-sm mb-1 animate-pulse-subtle"&gt;Synthesizing Meeting Intelligence...&lt;/h3&gt;
+                &lt;/div&gt;
+
+                &lt;div id="structured-output" class="hidden space-y-6"&gt;
+                    &lt;div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800"&gt;
+                        &lt;h4 class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5"&gt;
+                            &lt;i class="fa-solid fa-circle-info"&gt;&lt;/i&gt;&lt;span&gt;Executive Summary&lt;/span&gt;
+                        &lt;/h4&gt;
+                        &lt;p id="out-summary" class="text-sm leading-relaxed text-slate-700 dark:text-slate-300"&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center space-x-1.5"&gt;
+                            &lt;i class="fa-solid fa-comments"&gt;&lt;/i&gt;&lt;span&gt;Key Discussion Points&lt;/span&gt;
+                        &lt;/h4&gt;
+                        &lt;ul id="out-discussions" class="space-y-2 text-sm"&gt;&lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center space-x-1.5"&gt;
+                            &lt;i class="fa-solid fa-list-check"&gt;&lt;/i&gt;&lt;span&gt;Action Items &amp; Deadlines&lt;/span&gt;
+                        &lt;/h4&gt;
+                        &lt;div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800"&gt;
+                            &lt;table class="w-full text-left border-collapse text-sm"&gt;
+                                &lt;thead class="bg-slate-100 dark:bg-slate-800/80 text-xs text-slate-500 dark:text-slate-400 uppercase"&gt;
+                                    &lt;tr&gt;
+                                        &lt;th class="p-3 font-semibold"&gt;Task&lt;/th&gt;&lt;th class="p-3 font-semibold"&gt;Assignee&lt;/th&gt;&lt;th class="p-3 font-semibold"&gt;Deadline&lt;/th&gt;
+                                    &lt;/tr&gt;
+                                &lt;/thead&gt;
+                                &lt;tbody id="out-actions-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"&gt;&lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="p-4 rounded-xl bg-teal-50/50 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40"&gt;
+                        &lt;h4 class="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5"&gt;
+                            &lt;i class="fa-solid fa-calendar-check"&gt;&lt;/i&gt;&lt;span&gt;Next Steps &amp; Follow-ups&lt;/span&gt;
+                        &lt;/h4&gt;
+                        &lt;p id="out-followups" class="text-sm leading-relaxed text-slate-700 dark:text-slate-300"&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div id="markdown-output" class="hidden prose dark:prose-invert max-w-none text-sm leading-relaxed"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;div id="settings-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"&gt;
+        &lt;div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative"&gt;
+            &lt;div class="flex items-center justify-between mb-4"&gt;
+                &lt;h3 class="font-bold text-base flex items-center space-x-2"&gt;
+                    &lt;i class="fa-solid fa-key text-emerald-500"&gt;&lt;/i&gt;&lt;span&gt;Gemini API Key Configuration&lt;/span&gt;
+                &lt;/h3&gt;
+                &lt;button id="close-settings" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"&gt;&lt;i class="fa-solid fa-xmark"&gt;&lt;/i&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed"&gt;This app runs entirely in your browser. Enter your Gemini API key to enable client-side AI note processing.&lt;/p&gt;
+            &lt;div class="space-y-4"&gt;
+                &lt;div&gt;
+                    &lt;label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1"&gt;API Key&lt;/label&gt;
+                    &lt;input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"&gt;
+                &lt;/div&gt;
+                &lt;div class="flex justify-end space-x-2"&gt;
+                    &lt;button id="save-api-key" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-medium shadow-sm transition"&gt;Save Key&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 rounded-xl text-xs font-medium shadow-xl transform translate-y-16 opacity-0 transition-all duration-300 flex items-center space-x-2"&gt;
+        &lt;i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"&gt;&lt;/i&gt;
+        &lt;span id="toast-msg"&gt;Success&lt;/span&gt;
+    &lt;/div&gt;</code></pre>
+
+            <h3>3.2 Application Setup & Settings Logic (JavaScript Part 1)</h3>
+            <p>Now we add the script logic to open the `<script>` tag at the bottom of our HTML. This section manages Dark Mode, saves your API Key securely in <code>localStorage</code>, and manages the file upload buttons.</p>
+            <p><strong>Paste this immediately below the HTML you just pasted:</strong></p>
+
+            <div class="code-header"><span>index.html (Part 2: UI & Settings JS)</span></div>
+            <pre><code class="language-html">    &lt;script&gt;
         // Theme Management
         const themeToggleBtn = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
         
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             htmlElement.classList.add('dark');
         } else {
             htmlElement.classList.remove('dark');
         }
 
-        themeToggleBtn.addEventListener('click', () => {
+        themeToggleBtn.addEventListener('click', () =&gt; {
             if (htmlElement.classList.contains('dark')) {
                 htmlElement.classList.remove('dark');
                 localStorage.theme = 'light';
@@ -283,16 +366,16 @@
         let userApiKey = localStorage.getItem('gemini_api_key') || '';
         updateApiKeyStatus();
 
-        openSettingsBtn.addEventListener('click', () => {
+        openSettingsBtn.addEventListener('click', () =&gt; {
             apiKeyInput.value = userApiKey;
             settingsModal.classList.remove('hidden');
         });
 
-        closeSettingsBtn.addEventListener('click', () => {
+        closeSettingsBtn.addEventListener('click', () =&gt; {
             settingsModal.classList.add('hidden');
         });
 
-        saveApiKeyBtn.addEventListener('click', () => {
+        saveApiKeyBtn.addEventListener('click', () =&gt; {
             userApiKey = apiKeyInput.value.trim();
             localStorage.setItem('gemini_api_key', userApiKey);
             updateApiKeyStatus();
@@ -314,9 +397,7 @@
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').textContent = msg;
             toast.classList.remove('translate-y-16', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-16', 'opacity-0');
-            }, 3000);
+            setTimeout(() =&gt; { toast.classList.add('translate-y-16', 'opacity-0'); }, 3000);
         }
 
         // Notes Input Handling
@@ -325,20 +406,14 @@
         const clearBtn = document.getElementById('clear-btn');
         const fileUpload = document.getElementById('file-upload');
 
-        notesInput.addEventListener('input', () => {
-            charCount.textContent = `${notesInput.value.length} characters`;
-        });
+        notesInput.addEventListener('input', () =&gt; { charCount.textContent = `${notesInput.value.length} characters`; });
+        clearBtn.addEventListener('click', () =&gt; { notesInput.value = ''; charCount.textContent = '0 characters'; });
 
-        clearBtn.addEventListener('click', () => {
-            notesInput.value = '';
-            charCount.textContent = '0 characters';
-        });
-
-        fileUpload.addEventListener('change', (e) => {
+        fileUpload.addEventListener('change', (e) =&gt; {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (event) => {
+            reader.onload = (event) =&gt; {
                 notesInput.value = event.target.result;
                 charCount.textContent = `${notesInput.value.length} characters`;
                 showToast('File loaded successfully');
@@ -350,9 +425,9 @@
         const tabBtns = document.querySelectorAll('.tab-btn');
         let currentTab = 'structured';
 
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                tabBtns.forEach(b => {
+        tabBtns.forEach(btn =&gt; {
+            btn.addEventListener('click', (e) =&gt; {
+                tabBtns.forEach(b =&gt; {
                     b.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white', 'shadow-sm');
                     b.classList.add('text-slate-600', 'dark:text-slate-400');
                 });
@@ -371,9 +446,14 @@
                     markdownEl.classList.remove('hidden');
                 }
             });
-        });
+        });</code></pre>
 
-        // Processing & Gemini API Call
+            <h3>3.3 The AI Logic & Smart Extraction (JavaScript Part 2)</h3>
+            <p>This final piece is the true "brain" of our application. It sets up strict JSON formatting for the AI using `responseSchema`. Because AI models sometimes hallucinate extra conversational text even when told not to, this code includes a **Smart JSON Extractor** (using regular expressions) to isolate the data and ensure the app never crashes!</p>
+            <p><strong>Paste this final chunk immediately below the last one to finish your app:</strong></p>
+
+            <div class="code-header"><span>index.html (Part 3: Gemini API Logic)</span></div>
+            <pre><code class="language-html">        // Processing &amp; Gemini API Call
         const processBtn = document.getElementById('process-btn');
         const emptyState = document.getElementById('empty-state');
         const loadingState = document.getElementById('loading-state');
@@ -383,10 +463,14 @@
 
         let lastParsedData = null;
 
-        processBtn.addEventListener('click', async () => {
+        processBtn.addEventListener('click', async () =&gt; {
             const rawNotes = notesInput.value.trim();
             if (!rawNotes) {
                 showToast('Please enter or upload meeting notes first.');
+                return;
+            }
+            if (!userApiKey) {
+                showToast('Please configure your API key first.');
                 return;
             }
 
@@ -408,19 +492,12 @@
                         type: "OBJECT",
                         properties: {
                             summary: { type: "STRING" },
-                            keyDiscussions: {
-                                type: "ARRAY",
-                                items: { type: "STRING" }
-                            },
+                            keyDiscussions: { type: "ARRAY", items: { type: "STRING" } },
                             actionItems: {
                                 type: "ARRAY",
                                 items: {
                                     type: "OBJECT",
-                                    properties: {
-                                        task: { type: "STRING" },
-                                        assignee: { type: "STRING" },
-                                        deadline: { type: "STRING" }
-                                    },
+                                    properties: { task: { type: "STRING" }, assignee: { type: "STRING" }, deadline: { type: "STRING" } },
                                     required: ["task", "assignee", "deadline"]
                                 }
                             },
@@ -434,37 +511,6 @@
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
 
             try {
-                if (!userApiKey) {
-                    let candidate = result.candidates?.[0];
-
-                    if (candidate && candidate.content?.parts?.[0]?.text) {
-                        let jsonText = candidate.content.parts[0].text;
-                        
-                        // Extract just the JSON object in case the AI adds conversational filler text
-                        let jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-                        if (jsonMatch) {
-                            jsonText = jsonMatch[0];
-                        } else {
-                            jsonText = jsonText.replace(/```json/gi, '').replace(/```/gi, '').trim();
-                        }
-                        
-                        try {
-                            lastParsedData = JSON.parse(jsonText);
-                            renderResults(lastParsedData);
-                        } catch (parseError) {
-                            throw new Error('AI output formatting error. Please click Transform again.');
-                        }
-                    } else {
-                        throw new Error('Unexpected response structure from Gemini API. Content may be blocked.');
-                    }
-                } catch (err) {
-                    console.error(err);
-                    showToast(err.message || 'Error processing notes. Check API Key.');
-                    loadingState.classList.add('hidden');
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
-
                 let response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -472,18 +518,23 @@
                 });
 
                 if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
+                    const errData = await response.json().catch(() =&gt; ({}));
                     throw new Error(errData.error?.message || `API Error: ${response.status} ${response.statusText}`);
                 }
 
                 let result = await response.json();
                 let candidate = result.candidates?.[0];
 
-                if (candidate && candidate.content?.parts?.[0]?.text) {
+                if (candidate &amp;&amp; candidate.content?.parts?.[0]?.text) {
                     let jsonText = candidate.content.parts[0].text;
                     
-                    // Clean up potential markdown formatting before parsing
-                    jsonText = jsonText.replace(/```json/gi, '').replace(/```/gi, '').trim();
+                    // Smart Extractor to isolate JSON and prevent hallucination crashes
+                    let jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        jsonText = jsonMatch[0];
+                    } else {
+                        jsonText = jsonText.replace(/```json/gi, '').replace(/```/gi, '').trim();
+                    }
                     
                     lastParsedData = JSON.parse(jsonText);
                     renderResults(lastParsedData);
@@ -503,88 +554,107 @@
             structuredOutput.classList.remove('hidden');
             actionButtons.classList.remove('hidden');
 
-            // Render Summary
             document.getElementById('out-summary').textContent = data.summary || "No summary provided.";
 
-            // Render Key Discussions
             const discussionsList = document.getElementById('out-discussions');
             discussionsList.innerHTML = '';
-            (data.keyDiscussions || []).forEach(point => {
+            (data.keyDiscussions || []).forEach(point =&gt; {
                 const li = document.createElement('li');
                 li.className = 'flex items-start space-x-2 text-slate-700 dark:text-slate-300';
-                li.innerHTML = `<i class="fa-solid fa-check text-emerald-500 mt-1 flex-shrink-0 text-xs"></i><span>${point}</span>`;
+                li.innerHTML = `&lt;i class="fa-solid fa-check text-emerald-500 mt-1 flex-shrink-0 text-xs"&gt;&lt;/i&gt;&lt;span&gt;${point}&lt;/span&gt;`;
                 discussionsList.appendChild(li);
             });
 
-            // Render Action Items Table
             const tbody = document.getElementById('out-actions-tbody');
             tbody.innerHTML = '';
-            (data.actionItems || []).forEach(item => {
+            (data.actionItems || []).forEach(item =&gt; {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition';
                 tr.innerHTML = `
-                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${item.task || 'N/A'}</td>
-                    <td class="p-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">${item.assignee || 'Unassigned'}</span></td>
-                    <td class="p-3 text-slate-500 dark:text-slate-400 text-xs font-medium">${item.deadline || 'No Date'}</td>
+                    &lt;td class="p-3 font-medium text-slate-800 dark:text-slate-200"&gt;${item.task || 'N/A'}&lt;/td&gt;
+                    &lt;td class="p-3"&gt;&lt;span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"&gt;${item.assignee || 'Unassigned'}&lt;/span&gt;&lt;/td&gt;
+                    &lt;td class="p-3 text-slate-500 dark:text-slate-400 text-xs font-medium"&gt;${item.deadline || 'No Date'}&lt;/td&gt;
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Render Follow-ups
             document.getElementById('out-followups').textContent = data.followUps || "No specific follow-ups extracted.";
 
-            // Generate Markdown Representation
             let mdContent = `# Meeting Summary\n\n${data.summary}\n\n## Key Discussion Points\n` +
-                data.keyDiscussions.map(p => `- ${p}`).join('\n') +
+                data.keyDiscussions.map(p =&gt; `- ${p}`).join('\n') +
                 `\n\n## Action Items\n| Task | Assignee | Deadline |\n|---|---|---|\n` +
-                data.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadline} |`).join('\n') +
-                `\n\n## Follow-ups & Next Steps\n${data.followUps}`;
+                data.actionItems.map(a =&gt; `| ${a.task} | ${a.assignee} | ${a.deadline} |`).join('\n') +
+                `\n\n## Follow-ups &amp; Next Steps\n${data.followUps}`;
 
             document.getElementById('markdown-output').innerHTML = marked.parse(mdContent);
         }
 
-        // Export & Copy Actions
-        document.getElementById('copy-btn').addEventListener('click', () => {
+        // Export &amp; Copy Actions
+        document.getElementById('copy-btn').addEventListener('click', () =&gt; {
             if (!lastParsedData) return;
             let textToCopy = `MEETING SUMMARY:\n${lastParsedData.summary}\n\nACTION ITEMS:\n` +
-                lastParsedData.actionItems.map(a => `- ${a.task} (Assigned to: ${a.assignee}, Due: ${a.deadline})`).join('\n');
+                lastParsedData.actionItems.map(a =&gt; `- ${a.task} (Assigned to: ${a.assignee}, Due: ${a.deadline})`).join('\n');
             document.execCommand('copy');
-            // Fallback modern clipboard if available
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(textToCopy);
-            }
+            if (navigator.clipboard) { navigator.clipboard.writeText(textToCopy); }
             showToast('Copied summary to clipboard!');
         });
 
-        document.getElementById('export-md-btn').addEventListener('click', () => {
+        document.getElementById('export-md-btn').addEventListener('click', () =&gt; {
             if (!lastParsedData) return;
             let mdContent = `# Meeting Summary\n\n${lastParsedData.summary}\n\n## Key Discussion Points\n` +
-                lastParsedData.keyDiscussions.map(p => `- ${p}`).join('\n') +
+                lastParsedData.keyDiscussions.map(p =&gt; `- ${p}`).join('\n') +
                 `\n\n## Action Items\n| Task | Assignee | Deadline |\n|---|---|---|\n` +
-                lastParsedData.actionItems.map(a => `| ${a.task} | ${a.assignee} | ${a.deadline} |`).join('\n') +
-                `\n\n## Follow-ups & Next Steps\n${lastParsedData.followUps}`;
-
+                lastParsedData.actionItems.map(a =&gt; `| ${a.task} | ${a.assignee} | ${a.deadline} |`).join('\n') +
+                `\n\n## Follow-ups &amp; Next Steps\n${lastParsedData.followUps}`;
             const blob = new Blob([mdContent], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'meeting-summary.md';
-            a.click();
+            a.href = url; a.download = 'meeting-summary.md'; a.click();
             URL.revokeObjectURL(url);
             showToast('Exported as Markdown');
         });
 
-        document.getElementById('export-json-btn').addEventListener('click', () => {
+        document.getElementById('export-json-btn').addEventListener('click', () =&gt; {
             if (!lastParsedData) return;
             const blob = new Blob([JSON.stringify(lastParsedData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'meeting-summary.json';
-            a.click();
+            a.href = url; a.download = 'meeting-summary.json'; a.click();
             URL.revokeObjectURL(url);
             showToast('Exported as JSON');
         });
-    </script>
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <hr>
+
+            <h2>Step 4: Test and Share Your App!</h2>
+            <ol>
+                <li>Save your <code>index.html</code> file.</li>
+                <li>Double-click the file to open it directly in Chrome, Safari, or Edge.</li>
+                <li>Click the <strong>API Key</strong> button in the header and paste your Google AI Studio key.</li>
+                <li>Paste some messy notes and click <strong>Transform Notes</strong>!</li>
+            </ol>
+
+            <h3>How to share with others:</h3>
+            <ul>
+                <li><strong>Locally:</strong> Send the single <code>index.html</code> file to workshop attendees via email or Slack. Because it requires no backend, they can just open it in their browser!</li>
+                <li><strong>For Free Online:</strong> Drag and drop your project folder into <a href="https://drop.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify Drop</a> to get a live, sharable website link in seconds!</li>
+            </ul>
+
+        </article>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm border-t border-slate-800 mt-12">
+        <div class="max-w-4xl mx-auto px-6">
+            <p>&copy; 2024 AI Builder Workshop. Built for beginners, enhanced for pros.</p>
+        </div>
+    </footer>
+
+    <!-- Prism.js for rendering the syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
 </body>
 </html>
