@@ -101,7 +101,7 @@
                 <li><strong>How to Get a Gemini API Key:</strong> Generating your free developer key using Google AI Studio.</li>
                 <li><strong>The Power of Client-Side Apps:</strong> How to build a fully functional web app using a single HTML file—no backend server, databases, or complex hosting required.</li>
                 <li><strong>Modern Frontend Styling:</strong> Using <strong>Tailwind CSS</strong> via CDN to instantly style your app with professional design.</li>
-                <li><strong>Gemini API Integration:</strong> Connecting directly from the browser to Google's Gemini AI model (<code>gemini-2.5-flash</code>) using Structured Outputs to get reliable data every time.</li>
+                <li><strong>Gemini API Integration:</strong> Connecting directly from the browser to Google's Gemini AI model (<code>gemini-1.5-flash</code>) using Structured Outputs to get reliable data every time.</li>
             </ol>
 
             <hr>
@@ -113,6 +113,11 @@
             <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg my-6">
                 <p class="m-0 text-emerald-900 text-base"><strong>Why do you need an API key?</strong> <br>
                 AI models like Gemini run on powerful servers at Google. To use them, your web app needs to send a request over the internet. The API key acts like a secure, digital ID badge. It tells Google that you have permission to use the service and connects your web app's requests to your developer account.</p>
+            </div>
+
+            <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg my-6">
+                <p class="m-0 text-sky-900 text-base"><strong>Do I have to pay for this?</strong> <br>
+                <strong>No!</strong> Google offers a generous <strong>Free Tier</strong> for the Gemini API which is perfect for learning, testing, and running personal apps like this one. You do not need to enter a credit card to get your key. The Free Tier simply limits how many requests you can make per minute, which is more than enough for this workshop.</p>
             </div>
             
             <ol>
@@ -288,7 +293,7 @@
             document.getElementById('loading-state').classList.remove('hidden');
 
             // Set up the API URL with your key
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${userApiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
             
             // Build the specific instructions for Gemini
             const payload = {
@@ -321,25 +326,45 @@
                 });
                 let json = await res.json();
                 
-                // Parse the JSON data Gemini sent back
-                let data = JSON.parse(json.candidates[0].content.parts[0].text);
+                // 1. Check for API Errors (like invalid keys)
+                if (!res.ok) {
+                    throw new Error(json.error?.message || "API request failed");
+                }
+                
+                // 2. Check for missing data / safety blocks
+                if (!json.candidates || json.candidates.length === 0) {
+                    throw new Error("No results returned. Content may have been blocked by safety filters.");
+                }
+
+                // 3. Clean up the response (extract JSON safely from any AI filler text)
+                let rawText = json.candidates[0].content.parts[0].text;
+                let jsonMatch = rawText.match(/\{[\s\S]*\}/);
+                let cleanText = jsonMatch ? jsonMatch[0] : rawText.replace(/```json/gi, '').replace(/```/gi, '').trim();
+                
+                // Parse the clean JSON data
+                let data;
+                try {
+                    data = JSON.parse(cleanText);
+                } catch (parseError) {
+                    throw new Error("The AI returned data that couldn't be read properly. Try clicking Transform again.");
+                }
                 
                 // Update the HTML interface with the new data
                 document.getElementById('loading-state').classList.add('hidden');
                 document.getElementById('structured-output').classList.remove('hidden');
 
-                document.getElementById('out-summary').textContent = data.summary;
-                document.getElementById('out-actions-tbody').innerHTML = data.actionItems.map(item =&gt; 
+                document.getElementById('out-summary').textContent = data.summary || "No summary provided.";
+                document.getElementById('out-actions-tbody').innerHTML = (data.actionItems || []).map(item =&gt; 
                     `&lt;tr&gt;
-                        &lt;td class="p-2 border-b"&gt;${item.task}&lt;/td&gt;
-                        &lt;td class="p-2 border-b font-semibold text-emerald-600"&gt;${item.assignee}&lt;/td&gt;
-                        &lt;td class="p-2 border-b text-slate-500"&gt;${item.deadline}&lt;/td&gt;
+                        &lt;td class="p-2 border-b"&gt;${item.task || 'N/A'}&lt;/td&gt;
+                        &lt;td class="p-2 border-b font-semibold text-emerald-600"&gt;${item.assignee || 'Unassigned'}&lt;/td&gt;
+                        &lt;td class="p-2 border-b text-slate-500"&gt;${item.deadline || 'No date'}&lt;/td&gt;
                     &lt;/tr&gt;`
                 ).join('');
                 
             } catch (error) {
                 console.error(error);
-                alert('Error processing notes. Please check your API key and try again.');
+                alert('Error: ' + error.message);
                 document.getElementById('loading-state').classList.add('hidden');
             }
         });
