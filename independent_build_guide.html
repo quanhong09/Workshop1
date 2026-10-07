@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 2: Build Your Own AI App from Scratch</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        .prompt-block {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .prompt-block pre {
+            margin-bottom: 0 !important;
+            background-color: #1e293b !important;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 md:p-8 min-h-screen">
+
+    <main class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-lg prose prose-slate prose-blue max-w-none">
+        
+        <h1 class="text-4xl font-extrabold text-slate-900 border-b pb-4 mb-6">Part 2: Build Your Own AI App from Scratch 🚀</h1>
+        
+        <p>Welcome to Part 2 of the AI Workflows Working Session!</p>
+        <p>In Part 1, you built an AI Meeting Assistant. Under the hood, it followed a simple pattern that powers a huge number of real AI tools:</p>
+        
+        <pre><code class="language-text">Messy text in  →  Instructions + Schema  →  Gemini API  →  Structured JSON  →  Clean UI out</code></pre>
+
+        <p>In Part 2, you'll use that <strong>same pattern</strong> to build a <strong>completely new app</strong> for a business task you care about. You won't write it line by line. Instead, you'll <strong>direct Gemini</strong> to write it with you, one step at a time, using the prompts in this guide.</p>
+        
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg my-6">
+            <strong>You have 50 minutes.</strong> Each step has a suggested time box so you finish with something that works.
+        </div>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">🧭 Choose Your Track</h2>
+        <p>Pick the level that fits your experience. You can switch at any time.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Track</th>
+                    <th>Who it's for</th>
+                    <th>What you do</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>🟢 <strong>Guided</strong></td>
+                    <td>New to coding or AI tools</td>
+                    <td>Use the worked example (<strong>Job Posting Decoder</strong>) and copy the prompts exactly</td>
+                </tr>
+                <tr>
+                    <td>🟡 <strong>Template</strong></td>
+                    <td>Comfortable following code</td>
+                    <td>Pick your own idea and fill in the <code>[BRACKETS]</code> in each prompt</td>
+                </tr>
+                <tr>
+                    <td>🔴 <strong>Open</strong></td>
+                    <td>Confident builders</td>
+                    <td>Use the Step Checklist at the end and write your own prompts</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">⚠️ Before You Start: Three Rules</h2>
+        <ol>
+            <li><strong>Never paste your API key into the Gemini chat.</strong> Gemini will write code with a placeholder like <code>YOUR_API_KEY</code>. You paste the real key into your file yourself.</li>
+            <li><strong>Use sample or made-up data only.</strong> No real client info, employee data, or anything confidential.</li>
+            <li><strong>Save a backup first.</strong> Duplicate your Part 1 file as <code>meeting_assistant_backup.html</code>. Create a new file called <code>index.html</code> for your new app.</li>
+        </ol>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">🧱 The Anatomy of Your App</h2>
+        <p>Every app you build today has the same six parts. Each step below builds one of them.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Part</th>
+                    <th>What it does</th>
+                    <th>In Part 1 it was…</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td><strong>App idea</strong></td><td>Defines the user, input, and output</td><td>Meeting notes → action items</td></tr>
+                <tr><td>2</td><td><strong>JSON schema</strong></td><td>The exact shape of the AI's answer</td><td><code>summary</code>, <code>keyDiscussions</code>, <code>actionItems</code></td></tr>
+                <tr><td>3</td><td><strong>System instruction</strong></td><td>The AI's role and rules</td><td>"You are an expert executive meeting assistant…"</td></tr>
+                <tr><td>4</td><td><strong>UI shell</strong></td><td>The page: input box, button, results area</td><td>Emerald/teal Tailwind layout</td></tr>
+                <tr><td>5</td><td><strong>API call</strong></td><td>Sends text + instruction + schema to Gemini</td><td><code>fetch()</code> with <code>payload</code></td></tr>
+                <tr><td>6</td><td><strong>Renderer</strong></td><td>Turns the JSON into readable cards</td><td><code>renderResults(data)</code></td></tr>
+            </tbody>
+        </table>
+        <p><strong>Build in this order.</strong> Deciding the output (Steps 1–3) <em>before</em> writing any code is what keeps the app predictable.</p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 0: Prime Gemini with Context (2 min)</h2>
+        <p>Open a <strong>new</strong> Gemini chat just for this build. Send this prompt first so every later answer stays consistent.</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 0: Set the context</h4>
+            <pre><code class="language-text">I'm building a single-file web app (one index.html) during a workshop. Please act as my
+coding partner for the next 45 minutes. Constraints for everything you write:
+- One HTML file only. Tailwind CSS via CDN, Font Awesome via CDN, plain JavaScript.
+- It calls the Gemini API directly from the browser using fetch() and the
+  generateContent endpoint.
+- It uses a systemInstruction and a responseSchema with
+  responseMimeType "application/json" so the output is always structured JSON.
+- Use the placeholder YOUR_API_KEY. Never ask me for my real key.
+- Keep code beginner-friendly with short comments.
+Wait for my next message before writing any code. Reply "Ready" if you understand.</code></pre>
+        </div>
+
+        <p><strong>💡 Strong shortcut:</strong> Paste your working Part 1 code into this chat with: <em>"This is my working app from Part 1. Use it as the structural template for everything we build next."</em> Gemini will reuse your exact API setup, which avoids most bugs.</p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 1: Pick Your App Idea (5 min)</h2>
+        <p>Fill in this <strong>App Card</strong> before you write anything else. If you can't fill it in, your idea isn't ready yet.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Your answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Who</strong> uses it?</td><td></td></tr>
+                <tr><td>What messy <strong>input</strong> do they paste in?</td><td></td></tr>
+                <tr><td>What <strong>3–4 outputs</strong> do they want back?</td><td></td></tr>
+                <tr><td>What will you <strong>name</strong> it?</td><td></td></tr>
+            </tbody>
+        </table>
+
+        <h3>🟢 Guided example: Job Posting Decoder</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Who</td><td>A graduate student applying to jobs</td></tr>
+                <tr><td>Input</td><td>A long, jargon-heavy job posting</td></tr>
+                <tr><td>Outputs</td><td>Plain-English role summary, must-have skills, nice-to-have skills, likely interview questions</td></tr>
+                <tr><td>Name</td><td>Job Posting Decoder</td></tr>
+            </tbody>
+        </table>
+
+        <h3>More business ideas to steal</h3>
+        <ul>
+            <li><strong>Customer Review Analyzer:</strong> reviews in → sentiment, top complaints, top praise, suggested fixes</li>
+            <li><strong>Email Triage Assistant:</strong> a messy email thread in → summary, decisions needed, deadlines, draft reply</li>
+            <li><strong>Case Study Breakdown:</strong> a business case in → key problem, stakeholders, options, recommended next step</li>
+            <li><strong>Contract Plain-Speaker:</strong> a vendor agreement in → key terms, obligations, renewal dates, red flags</li>
+            <li><strong>Survey Response Coder:</strong> open-ended survey answers in → themes, counts per theme, representative quotes</li>
+        </ul>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 1 (stuck on an idea?)</h4>
+            <pre><code class="language-text">I'm a [YOUR PROGRAM] student interested in [INDUSTRY / FUNCTION]. Suggest 5 ideas for a
+simple AI web app where a user pastes in messy text and gets structured output back.
+For each idea, give: who uses it, the input, and 3-4 output fields. Keep them realistic
+for a 45-minute build.</code></pre>
+        </div>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 2: Design the JSON Schema (5 min)</h2>
+        <p>The schema is the <strong>contract</strong> between Gemini and your UI. Decide it now and everything else gets easier.</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 2: Design the schema</h4>
+            <pre><code class="language-text">My app is called [APP NAME]. The user pastes in [INPUT]. I want the AI to return:
+[OUTPUT 1], [OUTPUT 2], [OUTPUT 3], [OUTPUT 4].
+Write a Gemini API responseSchema for this using uppercase types (OBJECT, STRING,
+ARRAY, NUMBER, BOOLEAN). Use clear camelCase field names. Mark all fields as required.
+Then show me one short example of JSON that matches the schema.</code></pre>
+        </div>
+
+        <p>🟢 <strong>Guided:</strong> Replace the brackets with: <em>Job Posting Decoder / a job posting / a plain-English role summary / a list of must-have skills / a list of nice-to-have skills / 5 likely interview questions, each with a tip on how to answer.</em></p>
+
+        <p>✅ <strong>Checkpoint:</strong> Read the example JSON. Would this be useful to your user? If not, ask Gemini to change it <strong>now</strong>, not later.</p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 3: Write the System Instruction (5 min)</h2>
+        <p>This is the AI's "brain." A good instruction sets a <strong>role</strong>, a <strong>task</strong>, and <strong>rules</strong>.</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 3: Write the system instruction</h4>
+            <pre><code class="language-text">Write a systemInstruction for my app. The AI should act as [EXPERT ROLE].
+Its task is to analyze [INPUT] and fill in every field of the schema above.
+Rules to include:
+- Use only information in the provided text. Do not invent details.
+- If something is missing, say "Not stated" rather than guessing.
+- Be concise and practical.
+- [ANY RULE SPECIFIC TO YOUR APP]
+Keep it under 100 words. Return it as a single JavaScript string.</code></pre>
+        </div>
+
+        <p>🟢 <strong>Guided:</strong> Role = <em>a senior recruiter who helps students prepare for applications</em>. Extra rule = <em>"Interview questions must relate directly to the skills in the posting."</em></p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 4: Build the UI Shell (10 min)</h2>
+        <p>Now ask for the full page, using your app's own look and feel.</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 4: Build the page</h4>
+            <pre><code class="language-text">Now write the complete index.html for [APP NAME]. Include:
+- A header with the app name and the Font Awesome icon [ICON, e.g. fa-briefcase]
+- A large textarea labelled "[INPUT LABEL]" with placeholder sample text
+- A "[BUTTON TEXT]" button with a loading spinner state
+- An empty results area that will show one card per schema field
+- A color theme using Tailwind's [COLOR 1] and [COLOR 2] palettes
+- Dark mode support
+Use the systemInstruction and responseSchema we already wrote.
+Leave the API call as a TODO for now.</code></pre>
+        </div>
+
+        <h3>🎨 Theme ideas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vibe</th>
+                    <th>Palettes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Cyberpunk</td><td><code>fuchsia</code> + <code>purple</code></td></tr>
+                <tr><td>Trustworthy corporate</td><td><code>blue</code> + <code>indigo</code></td></tr>
+                <tr><td>Warm & creative</td><td><code>rose</code> + <code>orange</code></td></tr>
+                <tr><td>Calm & clean</td><td><code>sky</code> + <code>slate</code></td></tr>
+                <tr><td>Finance</td><td><code>green</code> + <code>zinc</code></td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Icon ideas:</strong> <code>fa-briefcase</code>, <code>fa-chart-line</code>, <code>fa-envelope-open-text</code>, <code>fa-scale-balanced</code>, <code>fa-comments</code>, <code>fa-robot</code></p>
+
+        <p>✅ <strong>Checkpoint:</strong> Save the file and open it in your browser. The page should load and look right, even though the button doesn't work yet.</p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 5: Wire Up the Gemini API Call (10 min)</h2>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 5: Connect the API</h4>
+            <pre><code class="language-text">Replace the TODO with a working async function that:
+1. Reads the textarea and stops with a friendly message if it's empty
+2. Builds a payload with: contents (the user's text), systemInstruction,
+   and generationConfig with responseMimeType "application/json" and our responseSchema
+3. Sends it with fetch() to the Gemini generateContent endpoint using YOUR_API_KEY
+4. Parses the JSON text from the response
+5. Calls renderResults(data)
+6. Shows the loading spinner while waiting and a clear error message if anything fails
+Use the same model name as my Part 1 app.
+Only show me the updated &lt;script&gt; section.</code></pre>
+        </div>
+
+        <p>Now paste your real API key into the file where it says <code>YOUR_API_KEY</code>. <strong>Do this in your code editor, not in the chat.</strong></p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 6: Render the Results (5 min)</h2>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 6: Display the output</h4>
+            <pre><code class="language-text">Write the renderResults(data) function. For each field in my schema:
+- Show strings as a paragraph in a card
+- Show arrays of strings as a bulleted list
+- Show arrays of objects as [TABLE / NUMBERED LIST / SEPARATE CARDS]
+Give each card a heading and a Font Awesome icon that matches its content.
+Match the Tailwind theme we chose. Handle empty arrays gracefully.</code></pre>
+        </div>
+
+        <p>✅ <strong>Checkpoint:</strong> Paste in real-looking sample text and click your button. You should see structured cards appear. 🎉 <strong>You now have a working app.</strong></p>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 7: Test and Debug (5 min)</h2>
+        <p>Something broken? That's normal. Open the browser console (right-click → <strong>Inspect</strong> → <strong>Console</strong>), copy the red error, and send this:</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Prompt 7: Fix the bug</h4>
+            <pre><code class="language-text">My app isn't working. When I [WHAT YOU DID], I expected [WHAT SHOULD HAPPEN],
+but instead [WHAT ACTUALLY HAPPENED].
+The console shows this error:
+[PASTE ERROR, WITH YOUR API KEY REMOVED]
+Here is the relevant part of my code:
+[PASTE CODE]
+Explain the cause in one sentence, then give me only the lines to change.</code></pre>
+        </div>
+
+        <h3>Common issues</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symptom</th>
+                    <th>Likely cause</th>
+                    <th>Ask Gemini…</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Nothing happens on click</td><td>Button ID doesn't match the event listener</td><td>"Check that my button IDs match my event listeners"</td></tr>
+                <tr><td><code>400</code> error</td><td>Schema format or payload structure is wrong</td><td>"Check my payload against the Gemini generateContent format"</td></tr>
+                <tr><td><code>403</code> error</td><td>API key missing or invalid</td><td>(Check your key yourself; don't paste it)</td></tr>
+                <tr><td><code>undefined</code> in cards</td><td>Field names in <code>renderResults</code> don't match the schema</td><td>"Make renderResults use exactly the field names in my schema"</td></tr>
+                <tr><td>AI output is vague or invented</td><td>System instruction is too loose</td><td>"Make my systemInstruction stricter about using only the provided text"</td></tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">Step 8: Level Up (any time left)</h2>
+        <p>Pick one. Each is a single prompt.</p>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Add a Print button</h4>
+            <pre><code class="language-text">Add a Print button next to my results that calls window.print(), and add print CSS
+so only the results area prints.</code></pre>
+        </div>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Add Copy and Export</h4>
+            <pre><code class="language-text">Add a "Copy to clipboard" button and an "Export .md" button that converts the
+results into clean Markdown and downloads it.</code></pre>
+        </div>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Add a sample-input button</h4>
+            <pre><code class="language-text">Add a "Try an example" button that fills the textarea with realistic sample text
+for my app, so new users can test it instantly.</code></pre>
+        </div>
+
+        <div class="prompt-block">
+            <h4 class="mt-0 text-blue-800 font-bold mb-2">💬 Add a tone or mode selector</h4>
+            <pre><code class="language-text">Add a dropdown that lets the user choose [OPTION A / OPTION B / OPTION C], and pass the
+choice into the prompt so the output changes accordingly.</code></pre>
+        </div>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">✅ Step Checklist (🔴 Open track)</h2>
+        <ul class="list-none pl-0">
+            <li><input type="checkbox" disabled> App Card complete: user, input, 3–4 outputs, name</li>
+            <li><input type="checkbox" disabled> JSON schema with required fields and an example output you're happy with</li>
+            <li><input type="checkbox" disabled> System instruction with role, task, and "don't invent" rule</li>
+            <li><input type="checkbox" disabled> UI shell loads in the browser with your own theme and icon</li>
+            <li><input type="checkbox" disabled> API call sends <code>systemInstruction</code>, <code>contents</code>, and <code>generationConfig</code> with <code>responseSchema</code></li>
+            <li><input type="checkbox" disabled> <code>renderResults(data)</code> displays every schema field</li>
+            <li><input type="checkbox" disabled> Tested with at least two different inputs</li>
+            <li><input type="checkbox" disabled> One Level Up feature added</li>
+        </ul>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">💡 Prompting Pro-Tips</h2>
+        <ol>
+            <li><strong>One step per prompt.</strong> Asking for the whole app at once produces code that's harder to debug.</li>
+            <li><strong>Ask for only what changed.</strong> End prompts with <em>"Only show me the updated section"</em> to avoid re-pasting the whole file.</li>
+            <li><strong>Make Gemini explain.</strong> Add <em>"Explain what this does in two sentences"</em> when you want to actually learn it.</li>
+            <li><strong>Correct, don't restart.</strong> If output is off, reply with what's wrong (<em>"The cards are too cramped; add more spacing"</em>) instead of opening a new chat.</li>
+            <li><strong>Save versions.</strong> Before any big change, duplicate your file (<code>index_v1.html</code>, <code>index_v2.html</code>) so you can always go back.</li>
+        </ol>
+
+        <hr>
+
+        <h2 class="text-2xl font-bold mt-8">🎤 Before Presentations (3:50 PM)</h2>
+        <p>Be ready to share in under 2 minutes:</p>
+        <ul>
+            <li><strong>What</strong> your app does and who it's for</li>
+            <li><strong>One prompt</strong> that worked really well</li>
+            <li><strong>One problem</strong> you hit and how you solved it (or didn't, that's useful too!)</li>
+        </ul>
+        
+        <div class="bg-red-50 text-red-800 p-4 rounded-lg mt-6 border border-red-200">
+            <strong>Don't forget:</strong> Submit your <code>index.html</code> within 48 hours to receive your certificate. <strong>Remove your API key before submitting.</strong>
+        </div>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</body>
+</html>
