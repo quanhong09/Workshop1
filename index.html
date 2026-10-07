@@ -7,13 +7,16 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Tailwind Typography Plugin for easy article styling -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Prism.js for Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     
@@ -21,415 +24,329 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#10b981', // Emerald 500
+                            600: '#059669', // Emerald 600
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        /* Custom styling for copy buttons on code blocks */
         .code-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #1d1f21;
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 1rem;
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #a1a1aa;
             margin-bottom: -1em;
             position: relative;
             z-index: 10;
-            font-weight: 600;
         }
         pre[class*="language-"] {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             margin-top: 0;
-            max-height: 500px;
-            overflow-y: auto;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 backdrop-blur-sm bg-white/90 shadow-sm">
+    <!-- Navigation/Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 backdrop-blur-sm bg-white/90">
         <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-2 text-emerald-600 font-bold text-lg">
-                <i class="fa-solid fa-laptop-code"></i>
+                <i class="fa-solid fa-code"></i>
                 <span>AI Builder Workshop</span>
             </div>
             <a href="#start" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">Start Building &rarr;</a>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <div class="bg-slate-900 text-white py-20 px-6 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-400 via-emerald-900 to-slate-900"></div>
         <div class="max-w-4xl mx-auto relative z-10 text-center">
-            <span class="inline-block py-1 px-3 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold tracking-wider mb-4 border border-emerald-500/30">ADVANCED EDITION</span>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Build a Pro-Level AI Meeting Assistant</h1>
+            <span class="inline-block py-1 px-3 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold tracking-wider mb-4 border border-emerald-500/30">BEGINNER FRIENDLY</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Build Your Own AI Meeting Assistant</h1>
             <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                Learn how to build a fully-featured, serverless web application complete with Dark Mode, Markdown exports, and intelligent data extraction using the cutting-edge <strong class="text-emerald-400">Gemini 3.8 Flash</strong> API.
+                Learn how to build a lightweight, serverless web application that runs entirely in your web browser. Turn messy notes into structured action items instantly using the Gemini API.
             </p>
         </div>
     </div>
 
+    <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-6 py-12" id="start">
-        <article class="prose prose-slate prose-lg max-w-none prose-a:text-emerald-600 hover:prose-a:text-emerald-500 prose-img:rounded-xl">
+        <article class="prose prose-slate prose-lg md:prose-xl max-w-none prose-a:text-emerald-600 hover:prose-a:text-emerald-500 prose-img:rounded-xl">
             
             <p class="lead">
-                Welcome! In this workshop, you will build an app that takes messy meeting transcripts and instantly extracts clean summaries, key discussion points, and structured action items in a beautiful UI. 
+                Welcome! In this workshop, you will build an app that takes messy meeting notes and uses the Gemini API to instantly extract clean summaries, key discussion points, and structured action items with assignees and deadlines.
             </p>
+
+            <hr>
+
+            <h2>What You Will Learn</h2>
+            <ol>
+                <li><strong>How to Get a Gemini API Key:</strong> Generating your free developer key using Google AI Studio.</li>
+                <li><strong>The Power of Client-Side Apps:</strong> How to build a fully functional web app using a single HTML file—no backend server, databases, or complex hosting required.</li>
+                <li><strong>Modern Frontend Styling:</strong> Using <strong>Tailwind CSS</strong> via CDN to instantly style your app with professional design.</li>
+                <li><strong>Gemini API Integration:</strong> Connecting directly from the browser to Google's Gemini AI model (<code>gemini-3.8-flash</code>) using Structured Outputs to get reliable data every time.</li>
+            </ol>
 
             <hr>
 
             <h2>Step 1: Get Your Free Gemini API Key</h2>
             <p>
-                To let your browser talk to Google's AI models, you'll need an API key. This is a secure string of text that tells Google you are authorized to use their services. 
+                To let your browser talk to Google's AI models, you'll need a free API key from Google AI Studio. 
             </p>
-            <div class="bg-sky-50 border-l-4 border-sky-500 p-5 rounded-r-lg my-6 shadow-sm">
-                <h4 class="m-0 text-sky-900 text-lg font-bold flex items-center mb-2">
-                    <i class="fa-solid fa-wallet mr-2"></i> Do I have to pay for this?
-                </h4>
-                <p class="m-0 text-sky-800 text-base">
-                    <strong>Absolutely not!</strong> Google offers a generous <strong>Free Tier</strong> which is perfect for this workshop. It gives you access to their flagship models (like <code>gemini-3.8-flash</code>) with the only limitation being a slightly lower rate limit (fewer requests per minute). No credit card is required!
-                </p>
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg my-6">
+                <p class="m-0 text-emerald-900 text-base"><strong>Why do you need an API key?</strong> <br>
+                AI models like Gemini run on powerful servers at Google. To use them, your web app needs to send a request over the internet. The API key acts like a secure, digital ID badge. It tells Google that you have permission to use the service and connects your web app's requests to your developer account.</p>
             </div>
             
             <ol>
-                <li>Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a> and sign in.</li>
-                <li>Click <strong>Get API key</strong> in the left-hand dashboard.</li>
-                <li>Click <strong>Create API key</strong>, copy it, and keep it somewhere handy.</li>
+                <li>Open your web browser and go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>.</li>
+                <li>Sign in with your Google account.</li>
+                <li>In the top left or center of the dashboard, click on <strong>Get API key</strong>.</li>
+                <li>Click <strong>Create API key in new project</strong> (or select an existing Google Cloud project if prompted).</li>
+                <li>Copy your newly generated API key and save it somewhere safe. You will paste this into your web app when you test it!</li>
             </ol>
 
             <hr>
 
             <h2>Step 2: Set Up Your Workspace</h2>
-            <p>Web browsers are incredibly powerful. This entire application will run locally on your machine without a database or server!</p>
+            <p>You don’t need any heavy software development environments or complex installations to get started.</p>
             <ol>
-                <li>Create a folder on your computer named <code>meeting-assistant</code>.</li>
-                <li>Inside it, create a single new file named <code>index.html</code>.</li>
-                <li>Open <code>index.html</code> in your favorite code editor (like VS Code, Notepad++, or Cursor).</li>
+                <li>Create a new folder on your computer named <code>meeting-assistant</code>.</li>
+                <li>Inside that folder, create a single file named <code>index.html</code>.</li>
+                <li>Open <code>index.html</code> in your favorite code editor (like VS Code, Notepad++, or TextEdit).</li>
             </ol>
 
             <hr>
 
-            <h2>Step 3: Building the Code (Copy & Paste)</h2>
+            <h2>Step 3: Building the Application Code</h2>
             <p>
-                We are going to build this app in three distinct chunks. Follow along below and paste the code exactly as instructed.
+                We are going to build this entire application inside your <code>index.html</code> file by copying and pasting three specific chunks of code. Before we build, let's understand how the AI's brain will work.
             </p>
 
-            <h3>3.1 The User Interface (HTML & CSS)</h3>
+            <h3>3.1 What Output Should You Expect?</h3>
             <p>
-                First, we build the visual structure. We are using <strong>Tailwind CSS</strong> to style our application simply by adding classes to our HTML tags (e.g., <code>class="bg-slate-900 text-white"</code>). This chunk also includes the setup for Dark Mode, our file uploader, and the Markdown rendering library!
+                When you paste messy notes like <em>"John said he will email the client by Tuesday"</em>, we don't just want the AI to write a generic paragraph back. We want to build a real tool.
             </p>
-            <p class="font-bold text-emerald-600 bg-emerald-50 inline-block px-3 py-1 rounded">Copy this first chunk and paste it into your empty index.html file:</p>
+            <p>
+                To do this, we use a feature called <strong>Structured Outputs</strong>. We write instructions in our code that force the Gemini AI to reply in a strict, predictable data format called <strong>JSON</strong>. The AI's hidden output will look like this:
+            </p>
 
-            <div class="code-header"><span><i class="fa-brands fa-html5 text-orange-400 mr-2"></i> index.html (Part 1: Full UI Structure)</span></div>
+            <div class="code-header"><span>JSON Output Example</span></div>
+            <pre><code class="language-json">{
+  "summary": "Quick touch-base on client outreach.",
+  "actionItems": [
+    { 
+      "task": "Email the client", 
+      "assignee": "John", 
+      "deadline": "Tuesday" 
+    }
+  ]
+}</code></pre>
+            <p>Because the data is perfectly structured, our JavaScript code can easily read it and instantly draw a beautiful, organized table on the screen!</p>
+
+            <h3>3.2 The HTML & CSS (The User Interface)</h3>
+            <p>First, we need to build what the user actually sees. The code below sets up the structure of the webpage.</p>
+            <ul>
+                <li><strong>Tailwind CSS:</strong> Notice classes like <code>class="bg-emerald-600 hover:bg-emerald-500"</code>. Instead of writing complicated external CSS files, we use Tailwind to style our app directly inside the HTML elements.</li>
+                <li><strong>ID Tags:</strong> Elements have specific IDs like <code>id="notes-input"</code> or <code>id="out-summary"</code>. These act as nametags. Later, our JavaScript will use these nametags to grab your text and inject the AI's final answers.</li>
+            </ul>
+            <p><strong>Copy this first chunk and paste it into your empty <code>index.html</code> file:</strong></p>
+
+            <div class="code-header"><span>index.html (Part 1: UI Structure)</span></div>
             <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en" class="h-full"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;MeetingMind - AI Meeting Notes Organizer&lt;/title&gt;
+    &lt;title&gt;MeetingMind - AI Meeting Notes&lt;/title&gt;
+    &lt;!-- We load Tailwind CSS here to style our app instantly --&gt;
     &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
-    &lt;script&gt;
-        tailwind.config = { darkMode: 'class' }
-    &lt;/script&gt;
-    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;
     &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
-    &lt;script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"&gt;&lt;/script&gt;
-    &lt;style&gt;body { font-family: 'Inter', sans-serif; }&lt;/style&gt;
+    &lt;style&gt; body { font-family: sans-serif; } &lt;/style&gt;
 &lt;/head&gt;
-&lt;body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 flex flex-col"&gt;
+&lt;body class="h-full bg-slate-50 text-slate-800 flex flex-col"&gt;
 
-    &lt;!-- Header Bar --&gt;
-    &lt;header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-30"&gt;
-        &lt;div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"&gt;
-            &lt;div class="flex items-center space-x-3"&gt;
-                &lt;div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white"&gt;
-                    &lt;i class="fa-solid fa-brain"&gt;&lt;/i&gt;
-                &lt;/div&gt;
-                &lt;h1 class="font-bold text-lg"&gt;MeetingMind&lt;/h1&gt;
-            &lt;/div&gt;
-            &lt;div class="flex items-center space-x-3"&gt;
-                &lt;button id="open-settings" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"&gt;
-                    &lt;i class="fa-solid fa-key text-emerald-500 mr-1"&gt;&lt;/i&gt; &lt;span id="api-key-status-text"&gt;API Key&lt;/span&gt;
-                &lt;/button&gt;
-                &lt;button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800"&gt;
-                    &lt;i class="fa-solid fa-moon dark:hidden"&gt;&lt;/i&gt;&lt;i class="fa-solid fa-sun hidden dark:inline"&gt;&lt;/i&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+    &lt;!-- Header Section --&gt;
+    &lt;header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center"&gt;
+        &lt;h1 class="font-bold text-xl"&gt;&lt;i class="fa-solid fa-brain text-emerald-500"&gt;&lt;/i&gt; MeetingMind&lt;/h1&gt;
+        &lt;button id="open-settings" class="px-4 py-2 bg-slate-100 rounded-lg text-sm font-medium hover:bg-slate-200"&gt;
+            &lt;i class="fa-solid fa-key text-emerald-500"&gt;&lt;/i&gt; API Key
+        &lt;/button&gt;
     &lt;/header&gt;
 
-    &lt;!-- Main Application Area --&gt;
-    &lt;main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden"&gt;
+    &lt;!-- Main Layout --&gt;
+    &lt;main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-6"&gt;
         
-        &lt;!-- Left Column: Notes Input --&gt;
-        &lt;section class="lg:col-span-5 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"&gt;
-            &lt;div class="p-4 border-b flex justify-between items-center"&gt;
-                &lt;h2 class="font-semibold text-sm"&gt;&lt;i class="fa-regular fa-pen-to-square text-emerald-500 mr-2"&gt;&lt;/i&gt;Input Notes&lt;/h2&gt;
-                &lt;label class="cursor-pointer px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200"&gt;
-                    &lt;i class="fa-solid fa-cloud-arrow-up"&gt;&lt;/i&gt; Upload File
-                    &lt;input type="file" id="file-upload" accept=".txt,.md" class="hidden"&gt;
-                &lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class="flex-1 p-4 flex flex-col"&gt;
-                &lt;textarea id="notes-input" placeholder="Paste transcript here..." class="w-full flex-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"&gt;&lt;/textarea&gt;
-                &lt;button id="process-btn" class="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium text-sm shadow-lg transform active:scale-95 transition-all"&gt;
-                    &lt;i class="fa-solid fa-wand-magic-sparkles mr-2"&gt;&lt;/i&gt; Transform Notes
-                &lt;/button&gt;
-            &lt;/div&gt;
+        &lt;!-- Left Side: Input --&gt;
+        &lt;section class="flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm p-4"&gt;
+            &lt;h2 class="font-semibold mb-2"&gt;Paste Meeting Notes&lt;/h2&gt;
+            &lt;textarea id="notes-input" class="flex-1 w-full p-3 bg-slate-50 border border-slate-200 rounded-lg resize-none focus:ring-2 focus:ring-emerald-500" placeholder="e.g., Sarah needs to send the report by Friday..."&gt;&lt;/textarea&gt;
+            &lt;button id="process-btn" class="mt-4 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-colors"&gt;
+                Transform Notes
+            &lt;/button&gt;
         &lt;/section&gt;
 
-        &lt;!-- Right Column: Output Tabs --&gt;
-        &lt;section class="lg:col-span-7 flex flex-col h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"&gt;
-            &lt;div class="px-4 py-3 border-b flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50"&gt;
-                &lt;div class="flex space-x-1 bg-slate-200/60 dark:bg-slate-800 p-1 rounded-lg text-xs font-medium"&gt;
-                    &lt;button data-tab="structured" class="tab-btn px-3 py-1.5 rounded-md bg-white dark:bg-slate-700 shadow-sm"&gt;Structured View&lt;/button&gt;
-                    &lt;button data-tab="markdown" class="tab-btn px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400"&gt;Markdown&lt;/button&gt;
-                &lt;/div&gt;
-                &lt;div id="action-buttons" class="hidden flex space-x-2"&gt;
-                    &lt;button id="export-md-btn" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 border"&gt;Export .MD&lt;/button&gt;
-                &lt;/div&gt;
+        &lt;!-- Right Side: Output --&gt;
+        &lt;section class="flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm p-6 overflow-y-auto"&gt;
+            &lt;div id="loading-state" class="hidden text-center text-slate-500 mt-10"&gt;
+                &lt;i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-emerald-500"&gt;&lt;/i&gt;
+                &lt;p&gt;AI is analyzing your notes...&lt;/p&gt;
             &lt;/div&gt;
-            &lt;div class="flex-1 overflow-y-auto p-6 relative"&gt;
-                &lt;div id="empty-state" class="h-full flex flex-col items-center justify-center text-center opacity-50"&gt;
-                    &lt;i class="fa-solid fa-clipboard-list text-4xl mb-4"&gt;&lt;/i&gt;
-                    &lt;p class="text-sm"&gt;Paste notes and click transform to see magic.&lt;/p&gt;
+            
+            &lt;div id="structured-output" class="hidden space-y-6"&gt;
+                &lt;div&gt;
+                    &lt;h3 class="text-sm font-bold text-emerald-600 uppercase"&gt;Summary&lt;/h3&gt;
+                    &lt;p id="out-summary" class="text-sm mt-1"&gt;&lt;/p&gt;
                 &lt;/div&gt;
-                &lt;div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-center"&gt;
-                    &lt;div class="w-12 h-12 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin mb-4"&gt;&lt;/div&gt;
-                    &lt;h3 id="loading-text" class="text-sm font-semibold text-emerald-600"&gt;Synthesizing Intelligence...&lt;/h3&gt;
+                &lt;div&gt;
+                    &lt;h3 class="text-sm font-bold text-emerald-600 uppercase"&gt;Action Items&lt;/h3&gt;
+                    &lt;table class="w-full text-left mt-2 border-collapse"&gt;
+                        &lt;thead class="bg-slate-100 text-xs uppercase"&gt;
+                            &lt;tr&gt;&lt;th class="p-2"&gt;Task&lt;/th&gt;&lt;th class="p-2"&gt;Assignee&lt;/th&gt;&lt;th class="p-2"&gt;Deadline&lt;/th&gt;&lt;/tr&gt;
+                        &lt;/thead&gt;
+                        &lt;tbody id="out-actions-tbody" class="text-sm divide-y divide-slate-100"&gt;&lt;/tbody&gt;
+                    &lt;/table&gt;
                 &lt;/div&gt;
-                &lt;div id="structured-output" class="hidden space-y-6"&gt;
-                    &lt;div&gt;&lt;h4 class="text-xs font-bold uppercase text-emerald-600 mb-2"&gt;Summary&lt;/h4&gt;&lt;p id="out-summary" class="text-sm"&gt;&lt;/p&gt;&lt;/div&gt;
-                    &lt;div&gt;&lt;h4 class="text-xs font-bold uppercase text-slate-500 mb-2"&gt;Key Discussions&lt;/h4&gt;&lt;ul id="out-discussions" class="space-y-2 text-sm"&gt;&lt;/ul&gt;&lt;/div&gt;
-                    &lt;div&gt;&lt;h4 class="text-xs font-bold uppercase text-slate-500 mb-2"&gt;Action Items&lt;/h4&gt;
-                        &lt;table class="w-full text-left text-sm border-collapse"&gt;
-                            &lt;thead class="bg-slate-100 dark:bg-slate-800"&gt;&lt;tr&gt;&lt;th class="p-2"&gt;Task&lt;/th&gt;&lt;th class="p-2"&gt;Assignee&lt;/th&gt;&lt;th class="p-2"&gt;Due&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-                            &lt;tbody id="out-actions-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"&gt;&lt;/tbody&gt;
-                        &lt;/table&gt;
-                    &lt;/div&gt;
-                    &lt;div&gt;&lt;h4 class="text-xs font-bold uppercase text-teal-600 mb-2"&gt;Follow Ups&lt;/h4&gt;&lt;p id="out-followups" class="text-sm"&gt;&lt;/p&gt;&lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div id="markdown-output" class="hidden prose dark:prose-invert text-sm"&gt;&lt;/div&gt;
             &lt;/div&gt;
         &lt;/section&gt;
     &lt;/main&gt;
 
-    &lt;!-- Settings Modal --&gt;
-    &lt;div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center hidden z-50"&gt;
-        &lt;div class="bg-white dark:bg-slate-900 border rounded-2xl w-96 p-6"&gt;
-            &lt;h3 class="font-bold mb-4"&gt;API Configuration&lt;/h3&gt;
-            &lt;input type="password" id="api-key-input" placeholder="Paste API Key here..." class="w-full px-3 py-2 mb-4 rounded-lg border dark:bg-slate-950 text-sm"&gt;
-            &lt;div class="flex justify-end space-x-2"&gt;
-                &lt;button id="close-settings" class="px-4 py-2 text-sm text-slate-500"&gt;Cancel&lt;/button&gt;
-                &lt;button id="save-api-key" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm"&gt;Save Key&lt;/button&gt;
-            &lt;/div&gt;
+    &lt;!-- API Key Modal (Hidden by default) --&gt;
+    &lt;div id="settings-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4"&gt;
+        &lt;div class="bg-white rounded-xl p-6 w-full max-w-sm"&gt;
+            &lt;h3 class="font-bold mb-2"&gt;Enter Gemini API Key&lt;/h3&gt;
+            &lt;input type="password" id="api-key-input" class="w-full p-2 border rounded mb-4" placeholder="AIzaSy..."&gt;
+            &lt;button id="save-api-key" class="w-full py-2 bg-emerald-600 text-white rounded"&gt;Save&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-    
-    &lt;!-- Toast Popups --&gt;
-    &lt;div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-sm shadow-xl transform translate-y-16 opacity-0 transition-all duration-300"&gt;
-        &lt;span id="toast-msg"&gt;&lt;/span&gt;
-    &lt;/div&gt;</code></pre>
 
-            <h3>3.2 Application Logic & Settings (JavaScript Part 1)</h3>
-            <p>
-                Now we open a <code>&lt;script&gt;</code> tag where our JavaScript will live. This chunk handles the Dark Mode toggle, our Tabs, and safely saves the user's API Key using the browser's local storage (meaning it never touches a database!).
-            </p>
-            <p class="font-bold text-emerald-600 bg-emerald-50 inline-block px-3 py-1 rounded">Paste this immediately below the HTML chunk you just pasted:</p>
+    &lt;!-- The JavaScript Brains will go here --&gt;</code></pre>
 
-            <div class="code-header"><span><i class="fa-brands fa-js text-yellow-400 mr-2"></i> index.html (Part 2: UI & Settings JS)</span></div>
+            <h3>3.3 API Key Management (JavaScript Part 1)</h3>
+            <p>Now we need to add the logic to make the app interactive. We open a <code>&lt;script&gt;</code> tag at the bottom of our HTML.</p>
+            <p>This first JavaScript section handles the API Key. We don't want users to type their key every time they refresh the page. So, we use a feature called <code>localStorage</code> to save the key securely in the user's browser. It also controls opening and closing the pop-up modal.</p>
+            <p><strong>Paste this code immediately below the HTML you just pasted in <code>index.html</code>:</strong></p>
+
+            <div class="code-header"><span>index.html (Part 2: API Key JS)</span></div>
             <pre><code class="language-html">    &lt;script&gt;
-        // 1. Theme Management (Dark/Light Mode)
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            htmlElement.classList.add('dark');
-        }
-        themeToggleBtn.addEventListener('click', () =&gt; {
-            htmlElement.classList.toggle('dark');
-            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
-        });
-
-        // 2. API Key Modal &amp; LocalStorage
-        const settingsModal = document.getElementById('settings-modal');
-        const apiKeyInput = document.getElementById('api-key-input');
+        // --- SECTION 1: API Key Management ---
+        // Check if the user already saved a key in their browser
         let userApiKey = localStorage.getItem('gemini_api_key') || '';
-        if (userApiKey) document.getElementById('api-key-status-text').textContent = 'Key Saved';
+        
+        // Open the settings modal when the button is clicked
+        document.getElementById('open-settings').onclick = () =&gt; {
+            document.getElementById('api-key-input').value = userApiKey; // Show current key
+            document.getElementById('settings-modal').classList.remove('hidden');
+        };
 
-        document.getElementById('open-settings').addEventListener('click', () =&gt; {
-            apiKeyInput.value = userApiKey;
-            settingsModal.classList.remove('hidden');
-        });
-        document.getElementById('close-settings').addEventListener('click', () =&gt; settingsModal.classList.add('hidden'));
-        document.getElementById('save-api-key').addEventListener('click', () =&gt; {
-            userApiKey = apiKeyInput.value.trim();
-            localStorage.setItem('gemini_api_key', userApiKey);
-            document.getElementById('api-key-status-text').textContent = 'Key Saved';
-            settingsModal.classList.add('hidden');
-            showToast('API key saved locally!');
-        });
+        // Save the key when the save button is clicked
+        document.getElementById('save-api-key').onclick = () =&gt; {
+            userApiKey = document.getElementById('api-key-input').value.trim();
+            localStorage.setItem('gemini_api_key', userApiKey); // Save to browser storage
+            document.getElementById('settings-modal').classList.add('hidden'); // Hide modal
+            alert("API Key Saved!");
+        };</code></pre>
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            toast.classList.remove('translate-y-16', 'opacity-0');
-            setTimeout(() =&gt; toast.classList.add('translate-y-16', 'opacity-0'), 4000);
-        }
+            <h3>3.4 The AI Logic (JavaScript Part 2)</h3>
+            <p>This final piece of code is the true "brain" of our application. Here is exactly what it does when you click the "Transform Notes" button:</p>
+            <ol>
+                <li><strong>Grabs your text:</strong> It reads what you pasted using <code>document.getElementById()</code>.</li>
+                <li><strong>Builds the Prompt:</strong> It creates a configuration object. Notice the <code>responseSchema</code> section—this is where we strictly enforce that Gemini must reply in JSON format with an array of action items.</li>
+                <li><strong>Calls the API:</strong> It securely sends your notes and your secret API key to Google's servers using <code>fetch()</code>.</li>
+                <li><strong>Updates the Screen:</strong> When Google replies, the code loops through the <code>actionItems</code> list and draws a new table row (<code>&lt;tr&gt;</code>) for every task!</li>
+            </ol>
+            <p><strong>Paste this final chunk immediately below the last one to finish your app:</strong></p>
 
-        // 3. File Upload Handler
-        document.getElementById('file-upload').addEventListener('change', (e) =&gt; {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) =&gt; document.getElementById('notes-input').value = event.target.result;
-            reader.readAsText(file);
-        });
-
-        // 4. Tab Switching Logic
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        tabBtns.forEach(btn =&gt; {
-            btn.addEventListener('click', (e) =&gt; {
-                tabBtns.forEach(b =&gt; b.className = "tab-btn px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400");
-                e.target.className = "tab-btn px-3 py-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm";
-                
-                if (e.target.getAttribute('data-tab') === 'structured') {
-                    document.getElementById('structured-output').classList.remove('hidden');
-                    document.getElementById('markdown-output').classList.add('hidden');
-                } else {
-                    document.getElementById('structured-output').classList.add('hidden');
-                    document.getElementById('markdown-output').classList.remove('hidden');
-                }
-            });
-        });</code></pre>
-
-            <h3>3.3 The AI Brain (JavaScript Part 2)</h3>
-            <p>
-                This final piece is the true magic. We use the <strong>Gemini 3.8 Flash</strong> model along with a strict JSON schema to force the AI to return data as predictable code. 
-            </p>
-            <p>
-                <strong>The Smart Extractor & Timeout:</strong> Because parsing heavy files can take 15-25 seconds, we added an <code>AbortController</code> to prevent the app from hanging infinitely. We also include a Regex Extractor to strip out any extra conversational words (like <em>"Here is your data!"</em>) that the AI might accidentally output.
-            </p>
-            <p class="font-bold text-emerald-600 bg-emerald-50 inline-block px-3 py-1 rounded">Paste this final chunk immediately below the last one to complete your app!</p>
-
-            <div class="code-header"><span><i class="fa-brands fa-js text-yellow-400 mr-2"></i> index.html (Part 3: Gemini API Logic)</span></div>
-            <pre><code class="language-html">        // 5. Processing &amp; Gemini API Call
-        let lastParsedData = null;
-
+            <div class="code-header"><span>index.html (Part 3: Gemini API Logic)</span></div>
+            <pre><code class="language-html">        // --- SECTION 2: AI Processing Logic ---
         document.getElementById('process-btn').addEventListener('click', async () =&gt; {
             const rawNotes = document.getElementById('notes-input').value.trim();
-            if (!rawNotes || !userApiKey) return showToast('Check Notes &amp; API Key!');
+            
+            // Check if user is ready
+            if (!userApiKey) { alert("Please click the 'API Key' button at the top to add your key first!"); return; }
+            if (!rawNotes) { alert("Please paste some notes first!"); return; }
 
-            // Set Loading State
-            document.getElementById('empty-state').classList.add('hidden');
+            // Show loading spinner, hide old results
             document.getElementById('structured-output').classList.add('hidden');
-            document.getElementById('markdown-output').classList.add('hidden');
             document.getElementById('loading-state').classList.remove('hidden');
-            
-            // Dynamic UI Updates while waiting
-            const loadingText = document.getElementById('loading-text');
-            loadingText.textContent = 'Synthesizing Meeting Intelligence...';
-            const slowLoadTimer = setTimeout(() =&gt; loadingText.textContent = 'Still thinking... Organizing complex data...', 6000);
-            
-            // 35 Second Timeout to prevent infinite hanging
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() =&gt; controller.abort(), 35000);
 
+            // Set up the API URL with your key (Updated to gemini-3.8-flash for stability)
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${userApiKey}`;
             
+            // Build the specific instructions for Gemini
             const payload = {
-                contents: [{ parts: [{ text: `Organize these notes into JSON:\n\n${rawNotes}` }] }],
-                systemInstruction: { parts: [{ text: "You are an executive assistant. Output ONLY valid JSON containing summary, keyDiscussions, actionItems (task, assignee, deadline), and followUps." }] },
+                contents: [{ parts: [{ text: `Organize these meeting notes:\n\n${rawNotes}` }] }],
+                systemInstruction: { parts: [{ text: "Extract summary and actionItems (task, assignee, deadline)." }] },
                 generationConfig: {
-                    responseMimeType: "application/json",
+                    responseMimeType: "application/json", // Force JSON output!
                     responseSchema: {
                         type: "OBJECT",
                         properties: {
                             summary: { type: "STRING" },
-                            keyDiscussions: { type: "ARRAY", items: { type: "STRING" } },
-                            actionItems: { type: "ARRAY", items: { type: "OBJECT", properties: { task: { type: "STRING" }, assignee: { type: "STRING" }, deadline: { type: "STRING" } } } },
-                            followUps: { type: "STRING" }
+                            actionItems: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: { task: { type: "STRING" }, assignee: { type: "STRING" }, deadline: { type: "STRING" } }
+                                }
+                            }
                         }
                     }
                 }
             };
 
+            // Send the request to Google
             try {
-                let response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
+                let res = await fetch(apiUrl, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(payload) 
                 });
+                
+                let json = await res.json();
 
-                clearTimeout(timeoutId);
-                clearTimeout(slowLoadTimer);
-
-                if (!response.ok) throw new Error(`API Error: ${response.status}`);
-                let result = await response.json();
+                // Smart extraction to prevent markdown crashes
+                let rawText = json.candidates[0].content.parts[0].text;
+                const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) throw new Error("Could not extract JSON from AI response.");
+                let data = JSON.parse(jsonMatch[0]);
                 
-                let jsonText = result.candidates[0].content.parts[0].text;
-                // SMART EXTRACTOR: Isolate JSON to prevent hallucination crashes
-                let jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-                jsonText = jsonMatch ? jsonMatch[0] : jsonText.replace(/```json/gi, '').replace(/```/gi, '').trim();
-                
-                lastParsedData = JSON.parse(jsonText);
-                renderResults(lastParsedData);
-                
-            } catch (err) {
-                clearTimeout(timeoutId);
-                clearTimeout(slowLoadTimer);
-                if (err.name === 'AbortError') {
-                    showToast('Request timed out. Google API is busy. Try again.');
-                } else {
-                    showToast(err.message || 'Error processing notes. Check API Key.');
-                }
+                // Update the HTML interface with the new data
                 document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('empty-state').classList.remove('hidden');
+                document.getElementById('structured-output').classList.remove('hidden');
+
+                document.getElementById('out-summary').textContent = data.summary;
+                document.getElementById('out-actions-tbody').innerHTML = data.actionItems.map(item =&gt; 
+                    `&lt;tr&gt;
+                        &lt;td class="p-2 border-b"&gt;${item.task}&lt;/td&gt;
+                        &lt;td class="p-2 border-b font-semibold text-emerald-600"&gt;${item.assignee}&lt;/td&gt;
+                        &lt;td class="p-2 border-b text-slate-500"&gt;${item.deadline}&lt;/td&gt;
+                    &lt;/tr&gt;`
+                ).join('');
+                
+            } catch (error) {
+                console.error(error);
+                alert('Error processing notes. Please check your API key and try again.');
+                document.getElementById('loading-state').classList.add('hidden');
             }
         });
-
-        // 6. Display the Results
-        function renderResults(data) {
-            document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('structured-output').classList.remove('hidden');
-            document.getElementById('action-buttons').classList.remove('hidden');
-
-            document.getElementById('out-summary').textContent = data.summary || "No summary provided.";
-            
-            const discussionsList = document.getElementById('out-discussions');
-            discussionsList.innerHTML = '';
-            (data.keyDiscussions || []).forEach(point =&gt; discussionsList.innerHTML += `&lt;li class="flex"&gt;&lt;i class="fa-solid fa-check text-emerald-500 mr-2 mt-1"&gt;&lt;/i&gt;${point}&lt;/li&gt;`);
-
-            const tbody = document.getElementById('out-actions-tbody');
-            tbody.innerHTML = '';
-            (data.actionItems || []).forEach(item =&gt; {
-                tbody.innerHTML += `
-                    &lt;tr&gt;&lt;td class="p-3 border-b border-slate-100 dark:border-slate-800"&gt;${item.task}&lt;/td&gt;
-                    &lt;td class="p-3 border-b"&gt;&lt;span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs"&gt;${item.assignee}&lt;/span&gt;&lt;/td&gt;
-                    &lt;td class="p-3 border-b text-xs text-slate-500"&gt;${item.deadline}&lt;/td&gt;&lt;/tr&gt;`;
-            });
-            
-            document.getElementById('out-followups').textContent = data.followUps || "None";
-
-            // Setup Markdown string for export
-            let mdContent = `# Meeting Summary\n\n${data.summary}\n\n## Action Items\n` +
-                data.actionItems.map(a =&gt; `- [ ] ${a.task} (@${a.assignee} by ${a.deadline})`).join('\n');
-            document.getElementById('markdown-output').innerHTML = marked.parse(mdContent);
-            
-            // Export Button Logic
-            document.getElementById('export-md-btn').onclick = () =&gt; {
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(new Blob([mdContent], { type: 'text/markdown' }));
-                a.download = 'meeting-notes.md';
-                a.click();
-            };
-        }
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
@@ -444,18 +361,33 @@
                 <li>Paste some messy notes and click <strong>Transform Notes</strong>!</li>
             </ol>
 
+            <h3>How to share with others:</h3>
+            <ul>
+                <li><strong>Locally:</strong> Send the single <code>index.html</code> file to workshop attendees via email or Slack. Because it requires no backend, they can just open it in their browser!</li>
+                <li><strong>For Free Online:</strong> Drag and drop your project folder into <a href="https://drop.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify Drop</a> to get a live, sharable website link in seconds!</li>
+            </ul>
+
+            <!-- NEW: SEAMLESS LINK TO PART 2 -->
+            <div class="mt-16 bg-emerald-50 border-2 border-emerald-200 rounded-xl p-8 text-center not-prose">
+                <h2 class="text-3xl font-extrabold text-emerald-900 mt-0 mb-3">Ready to level up?</h2>
+                <p class="text-emerald-800 text-lg mb-8 max-w-2xl mx-auto">Now that you've built the template and understand how the Gemini API works, it's time to build your own custom AI application from scratch.</p>
+                <a href="independent_build_guide.html" class="inline-block bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 px-10 rounded-lg shadow-lg transition duration-300 text-xl transform hover:-translate-y-1">
+                    🚀 Proceed to Part 2: Build Your Own App
+                </a>
+            </div>
+
         </article>
     </main>
 
+    <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm border-t border-slate-800 mt-12">
         <div class="max-w-4xl mx-auto px-6">
-            <p>&copy; 2026 AI Builder Workshop. Built for beginners, enhanced for pros.</p>
+            <p>&copy; 2026 AI Builder Workshop. Built for beginners.</p>
         </div>
     </footer>
 
     <!-- Prism.js for rendering the syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
 </body>
